@@ -62,7 +62,7 @@ jobs:
 
     # Docker 이미지 Build
     - name: docker image build
-      run: docker build -t dockerfile:latest .
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }} Dockerfile:latest .
 
     # Docker Hub push
     - name: docker push
