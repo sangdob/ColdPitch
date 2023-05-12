@@ -52,8 +52,8 @@ jobs:
       run: chmod +x gradlew
         
     # Spring Boot Build
-#     - name: Spring Boot Build
-#       run: ./gradlew clean build --exclude-task test
+    - name: Spring Boot Build
+      run: ./gradlew clean build --exclude-task test
       
     # DockerHub Login
     - name: docker login 
