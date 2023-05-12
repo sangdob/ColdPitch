@@ -62,7 +62,7 @@ jobs:
 
     # Docker 이미지 Build
     - name: docker image build
-      run: docker build -t coldpitch
+      run: docker build -t Dockerfile
     
     # Docker Hub push
     - name: docker push
