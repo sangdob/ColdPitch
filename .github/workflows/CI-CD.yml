@@ -46,7 +46,7 @@ jobs:
         
     # Spring Boot Build
     - name: Spring Boot Build
-      run: ./gradlew clean build --exclude-task test
+      run: ./gradlew clean build --debug --exclude-task test
       
     # DockerHub Login
     - name: docker login 
