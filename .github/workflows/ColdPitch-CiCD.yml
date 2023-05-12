@@ -1,0 +1,101 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: ColdPitch - CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy: 
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3    
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+                
+    # gradle caching
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    # create application.yml
+#     - name: make application.yml
+#       if: contains(github.ref, 'main') # branch가 main 일 때, 나머지는 위와 동일
+#       run: |
+#           cd ./src/main/resources
+#           touch ./application.yml
+#           echo "${{ secrets.PROPERTIES_PROD }}" > ./application-prod.properties
+#       shell: bash
+        
+    # Spring Boot 어플리케이션 Build (1)
+    - name: Spring Boot Build
+      run: chmod +x ./gradlew clean build --exclude-task test
+    
+    # Docker 이미지 Build (2)
+    - name: docker image build
+      run: docker build -t ${{ secrets.DOCKERHUB_REPOSITORY }}/coldpitch-prod . 
+    
+    # DockerHub Login (3)
+    - name: docker login 
+      uses: docker login-action@v2
+      with: 
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # Docker Hub push (4)
+    - name: docker image build and Hub push
+      run: docker push ${{ secrets.DOCKERHUB_REPOSITORY }}/coldpitch-prod
+      
+      
+    ## deploy to production
+    - name: aws build
+      uses: appleboy/ssh-action@master
+     # id: deploy-prod
+     # if: contains(github.ref, 'main')
+      with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ${{ secrets.USERNAME }}
+          #key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          #envs: GITHUB_SHA
+          script: |
+              sudo docker rm -f $(docker ps -qa)
+              sudo docker pull ${{ secrets.DOCKER_REPO }}/coldpitch-prod
+              docker-compose up -d
+              docker image prune -f
+    
+## time
+  current-time:
+    #needs: CI-CD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Current Time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH:mm:ss
+          utcOffset: "+09:00" # 기준이 UTC이기 때문에 한국시간인 KST를 맞추기 위해 +9시간 추가
+
+      - name: Print Current Time
+        run: echo "Current Time=${{steps.current-time.outputs.formattedTime}}" # current-time 에서 지정한 포맷대로 현재 시간 출력
+        shell: bash
