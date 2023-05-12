@@ -38,9 +38,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
           
+# application.yml path 등록 이후
     # create application.yml
 #     - name: make application.yml
-#       if: contains(github.ref, 'main') # branch가 main 일 때, 나머지는 위와 동일
+#       if: contains(github.ref, 'main')
 #       run: |
 #           cd ./src/main/resources
 #           touch ./application.yml
@@ -49,7 +50,7 @@ jobs:
 
     # Spring Boot 어플리케이션 Build (1)
     - name: Spring Boot Build
-      run: ./gradlew clean build --exclude-task test
+      run: chmod +x ./gradlew clean build --exclude-task test
 
     # Docker 이미지 Build (2)
     - name: docker image build
