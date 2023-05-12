@@ -62,11 +62,11 @@ jobs:
 
     # Docker 이미지 Build
     - name: docker image build
-      run: docker build -t dockerfile .
+      run: docker build -t dockerfile:latest .
 
     # Docker Hub push
     - name: docker push
-      run: docker push ${{ secrets.DOCKERHUB_REPOSITORY}}/dockerfile:0.1
+      run: docker push ${{ secrets.DOCKERHUB_REPOSITORY}}/dockerfile:latest
       
     #- name: docker image build        
       #uses: docker/build-push-action@v2
