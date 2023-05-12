@@ -41,9 +41,9 @@ jobs:
           
     # Spring Boot 어플리케이션 Build (1)
     - name: Spring Boot Clean
-      run: chmod +x ./gradlew clean 
+      run: chmod +x ./gradlew clean build --exclude-task test
     
-    - name: Spring Boot Build
-      run: chmod +x ./gradlew build --exclude-task test
+    #- name: Spring Boot Build
+   #   run: chmod +x ./gradlew build --exclude-task test
     
     
