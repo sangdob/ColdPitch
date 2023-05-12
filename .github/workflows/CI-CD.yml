@@ -72,7 +72,7 @@ jobs:
         script: |
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
           docker stop $(docker ps -a -q)
-          docker run -d --log-driver=syslog -p 8080:8080 --name coldpitch -v coldpitch:/logs ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+          docker run -d --log-driver=syslog -p 8080:8080 --name coldpitch -v coldpitch:/var/log ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
           docker rm $(docker ps --filter 'status=exited' -a -q)
           docker image prune -a -f  
     
