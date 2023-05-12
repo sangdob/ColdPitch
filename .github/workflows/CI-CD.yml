@@ -62,12 +62,12 @@ jobs:
 
     # Docker 이미지 Build (2)
     - name: docker image build
-      run: docker build -t ${{ secrets.DOCKERHUB_REPOSITORY }}/coldpitch-prod . 
+      run: docker build -t ${{ secrets.DOCKERHUB_REPOSITORY }}/dockerfile .
     
 
     # Docker Hub push (4)
     - name: docker push
-      run: docker push ${{ secrets.DOCKERHUB_REPOSITORY }}/coldpitch-prod
+      run: docker push ${{ secrets.DOCKERHUB_REPOSITORY }}/dockerfile
       
       
     ## deploy to production
