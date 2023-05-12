@@ -19,17 +19,31 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-                
-    # gradle caching
-    - name: Gradle Caching
-      uses: actions/cache@v3
+        
+    - name: Deploy
+      uses: appleboy/ssh-action@master
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+        host: ${{ secrets.AWS_HOST }} # EC2 인스턴스 퍼블릭 DNS
+        username: root
+        key: ${{ secrets.AWS_PRIVACY_KEY }} # pem 키
+        # 도커 작업
+        script: |
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+          docker stop $(docker ps -a -q)
+          docker run -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+          docker rm $(docker ps --filter 'status=exited' -a -q)
+          docker image prune -a -f     
+          
+    # gradle caching
+#     - name: Gradle Caching
+#       uses: actions/cache@v3
+#       with:
+#         path: |
+#           ~/.gradle/caches
+#           ~/.gradle/wrapper
+#         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#         restore-keys: |
+#           ${{ runner.os }}-gradle-
           
     # create application.yml
 #     - name: make application.yml
@@ -41,41 +55,26 @@ jobs:
 #       shell: bash
   
     # gradlew permission denied
-    - name: gradlew accessed
-      run: chmod +x gradlew
+#     - name: gradlew accessed
+#       run: chmod +x gradlew
         
     # Spring Boot Build
-    - name: Spring Boot Build
-      run: ./gradlew clean build --exclude-task test
+#     - name: Spring Boot Build
+#       run: ./gradlew clean build --exclude-task test
       
     # DockerHub Login
-    - name: docker login 
-      #uses: docker login-action@v2
-      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+#     - name: docker login 
+#       #uses: docker login-action@v2
+#       run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
     # Docker 이미지 Build
-    - name: docker image build
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }} ./
+#     - name: docker image build
+#       run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }} ./
       
     # Docker Hub push
-    - name: docker push
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
+#     - name: docker push
+#       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
       
-    # deploy to production
-    - name: aws build
-      uses: appleboy/ssh-action@master
-     # id: deploy-prod
-      with:
-          host: ${{ secrets.HOST_PROD }}
-          #username: ${{ secrets.USERNAME }}
-          #key: ${{ secrets.PRIVATE_KEY }}
-          port: 22
-          #envs: GITHUB_SHA
-          script: |
-              sudo docker rm -f $(docker ps -qa)
-              sudo docker pull ${{ secrets.DOCKERHUB_REPOSITORY }}/coldpitch-prod
-              docker-compose up -d
-              docker image prune -f
     
       ## time
   current-time:
