@@ -1,6 +1,6 @@
-package com.ColdPitch.domain.Service;
+package com.ColdPitch.domain.service;
 
-import com.ColdPitch.domain.Repository.HelloRepository;
+import com.ColdPitch.domain.repository.HelloRepository;
 import com.ColdPitch.domain.entity.Hello;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

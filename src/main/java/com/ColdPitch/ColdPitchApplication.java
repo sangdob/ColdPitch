@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 
 
 @SpringBootApplication
-@Profile("prod")
+//@Profile("prod")
 public class ColdPitchApplication {
 
 	public static void main(String[] args) {
