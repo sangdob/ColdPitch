@@ -38,7 +38,11 @@ jobs:
 #         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 #         restore-keys: |
 #           ${{ runner.os }}-gradle-
-          
+
+    # gradlew permission denied
+    - name: gradlew accessed
+      run: chmod +x gradlew
+    
     # Spring Boot 어플리케이션 Build (1)
     - name: Spring Boot Clean
       run: ./gradlew clean build
