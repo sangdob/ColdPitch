@@ -16,4 +16,6 @@ COPY build/libs/ColdPitch-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
 # 컨테이너 실행 시 실행할 명령
+RUN ["apt", "update"]
+RUN ["apt", "install", "-y", "vim"]
 CMD ["java", "-jar", "app.jar"]
