@@ -46,6 +46,10 @@ jobs:
 #           touch ./application.yml
 #           echo "${{ secrets.PROPERTIES_PROD }}" > ./application-prod.properties
 #       shell: bash
+  
+    # gradlew permission denied
+    - name: gradlew accessed
+      run: chmod +x gradlew
         
     # Spring Boot 어플리케이션 Build (1)
     - name: Spring Boot Build
