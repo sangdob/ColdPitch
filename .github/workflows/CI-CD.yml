@@ -62,11 +62,11 @@ jobs:
 
     # Docker 이미지 Build
     - name: docker image build
-      run: docker build -t Dockerfile
+      run: docker build -t ${{ secrets.DOCKERHUB_REPOSITORY }}/dockerfile
     
     # Docker Hub push
     - name: docker push
-      run: docker push ${{ secrets.DOCKERHUB_REPOSITORY }}
+      run: docker push ${{ secrets.DOCKERHUB_REPOSITORY }}/dockerfile
             
     ## deploy to production
     - name: aws build
