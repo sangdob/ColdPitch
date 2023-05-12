@@ -62,11 +62,11 @@ jobs:
 
     # Docker 이미지 Build
     - name: docker image build
-      run: docker build -t Dockerfile .
+      run: docker build -t dockerfile .
 
     # Docker Hub push
     - name: docker push
-      run: docker push Dockerfile .
+      run: docker push dockerfile .
       
     #- name: docker image build        
       #uses: docker/build-push-action@v2
