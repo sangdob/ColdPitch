@@ -5,10 +5,11 @@ import com.ColdPitch.domain.entity.Hello;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -27,5 +28,13 @@ public class HelloApiController {
     public ResponseEntity save(Hello hello) {
         Hello save = helloService.save(hello);
         return ResponseEntity.ok(save);
+    }
+
+    @PostMapping("/test")
+    @ResponseBody
+    public Map test(Map map, HttpServletRequest request) {
+        map.put("value", request.getParameter("input"));
+        map.put("result", "200");
+        return map;
     }
 }
