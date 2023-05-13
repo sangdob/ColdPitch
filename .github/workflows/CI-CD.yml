@@ -75,7 +75,7 @@ jobs:
           docker stop coldpitch
           # docker rm $(docker ps --filter 'status=exited' -a -q)
           docker rm coldpitch
-          docker run -d --log-driver=syslog -p 9000:9000 --name coldpitch --restart always ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+          docker run -d --log-driver=syslog -p 8080:8080 --name coldpitch --restart always ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
           docker image prune -a -f  
     
       ## time
