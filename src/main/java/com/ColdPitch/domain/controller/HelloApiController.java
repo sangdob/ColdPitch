@@ -14,6 +14,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 @Slf4j
 public class HelloApiController {
     private final HelloService helloService;
