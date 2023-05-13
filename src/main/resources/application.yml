@@ -2,7 +2,7 @@
 server:
   compression:
     enabled: true
-  port: 9000
+  port: 8080
 
 #Spring Settings
 spring:
