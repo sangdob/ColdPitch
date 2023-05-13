@@ -32,6 +32,7 @@ public class HelloApiController {
 
     @PostMapping("/test")
     @ResponseBody
+    @CrossOrigin("*")
     public Map test(Map map, HttpServletRequest request) {
         map.put("value", request.getParameter("input"));
         map.put("result", "200");
