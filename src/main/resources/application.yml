@@ -30,13 +30,13 @@ spring:
 
 # logging level settings
 logging.level:
-  org.hibernate.SQL: trace
-  org.hibernate.type: trace
+  org.hibernate.SQL: debug
+  org.hibernate.type: info
   
-logging:
-  file:
-    name: coldpitch.log
-    path: /var/log
+#logging:
+#  file:
+#    name: coldpitch.log
+#    path: /var/log
 
 # Pagable default Settings
 #  data:
